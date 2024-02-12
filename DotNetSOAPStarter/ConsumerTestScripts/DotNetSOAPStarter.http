@@ -1,0 +1,39 @@
+@DotNetSOAPStarter_HostAddress = http://localhost:5219
+
+###
+
+# will fail due to bad media type
+POST {{DotNetSOAPStarter_HostAddress}}/Service1
+###
+
+# will fail due to missing payload
+POST {{DotNetSOAPStarter_HostAddress}}/Service1
+Content-Type: application/xml
+###
+
+# SOAP 1.1 version
+POST {{DotNetSOAPStarter_HostAddress}}/Service1
+Content-Type: application/xml
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://some.com/services/">
+  <soap:Header />
+  <soap:Body>
+    <ser:GetWeatherForecast />
+  </soap:Body>
+</soap:Envelope>
+###
+
+# SOAP 1.2 version
+POST {{DotNetSOAPStarter_HostAddress}}/Service2
+Content-Type: application/xml
+
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:ser="http://some.com/services/">
+  <soap:Header />
+  <soap:Body>
+    <ser:GetWeatherForecast />
+  </soap:Body>
+</soap:Envelope>
+###
+
+GET {{DotNetSOAPStarter_HostAddress}}/Service1?wsdl
+###
