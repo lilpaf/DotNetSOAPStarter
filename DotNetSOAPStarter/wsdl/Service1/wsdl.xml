@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+    xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+    xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing"
+    xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy"
+    xmlns:wsa10="http://www.w3.org/2005/08/addressing"
+    xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl"
+    xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+    xmlns:wsx="http://schemas.xmlsoap.org/ws/2004/09/mex"
+    xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract"
+    xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+    xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+    xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    xmlns:tns="http://some.com/service/"
+    xmlns:i0="http://tempuri.org/" name="Service" targetNamespace="http://some.com/service/"
+    xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+	<wsdl:import namespace="http://tempuri.org/" location="{SERVICEURL}?wsdl=wsdl0" />
+	<wsdl:types>
+		<xsd:schema targetNamespace="http://some.com/service/Imports">
+			<xsd:import schemaLocation="{SERVICEURL}?xsd=xsd0" namespace="http://some.com/service/" />
+			<xsd:import schemaLocation="{SERVICEURL}?xsd=xsd1" namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+		</xsd:schema>
+	</wsdl:types>
+	<wsdl:message name="MyServiceName_GetWeatherForecast_InputMessage">
+		<wsdl:part name="parameters" element="tns:GetWeatherForecast" />
+	</wsdl:message>
+	<wsdl:message name="MyServiceName_GetWeatherForecast_OutputMessage">
+		<wsdl:part name="parameters" element="tns:GetWeatherForecastResponse" />
+	</wsdl:message>
+	<wsdl:portType name="MyServiceName">
+		<wsdl:operation name="GetWeatherForecast">
+			<wsdl:input wsaw:Action="http://some.com/service/MyServiceName/GetWeatherForecast" message="tns:MyServiceName_GetWeatherForecast_InputMessage" />
+			<wsdl:output wsaw:Action="http://some.com/service/MyServiceName/GetWeatherForecastResponse" message="tns:MyServiceName_GetWeatherForecast_OutputMessage" />
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:service name="Service">
+		<wsdl:port name="WSHttpBinding_MyServiceName" binding="i0:WSHttpBinding_MyServiceName">
+			<soap:address location="{SERVICEURL}" />
+			<wsa10:EndpointReference>
+				<wsa10:Address>{SERVICEURL}</wsa10:Address>
+			</wsa10:EndpointReference>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>

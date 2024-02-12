@@ -3,6 +3,15 @@ using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace DotNetSOAPStarter.SOAP.MVC_Customisations.Binders
 {
+    // This binder allows us to determine if a query string parameter is present on the url and whether it has a value or not
+    // e.g. 
+    // {url}?test - will bind to parameter string? test with a value of empty string
+    // {url}?test=hello - will bind to parameter string? test with a value of 'hello'
+    // {url}? - will bind to parameter string? test with a value of null
+    // So 
+    // Null means the parameter was not in the query string
+    // Empty string means the parameter was in the query string without any value
+    // A string value means the parameter was in the query string and had a value
     public class QueryStringNullOrEmptyModelBinder : IModelBinder
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)

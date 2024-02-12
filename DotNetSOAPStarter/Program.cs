@@ -20,14 +20,12 @@ try
 
     // Add services to the container.
 
-    //builder.Services.AddControllers(options =>
-    //{
-    //    options.ModelBinderProviders.Insert(0, new QueryStringNullOrEmptyModelBinderProvider());
-    //})
-    //.AddXmlSerializerFormatters(); 
+    builder.Services.AddControllers(options =>
+    {
+        options.ModelBinderProviders.Insert(0, new QueryStringNullOrEmptyModelBinderProvider());
+    })
+    .AddXmlSerializerFormatters(); 
     
-    builder.Services.AddControllers()
-    .AddXmlSerializerFormatters();
     //builder.Services.AddEndpointsApiExplorer();
     //builder.Services.AddSwaggerGen();
 
