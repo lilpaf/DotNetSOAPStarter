@@ -1,6 +1,4 @@
 using Serilog;
-using Serilog.Core;
-using Serilog.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 

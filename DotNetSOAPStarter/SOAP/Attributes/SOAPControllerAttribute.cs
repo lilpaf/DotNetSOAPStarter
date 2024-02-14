@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Net.Mime;
 
-namespace DotNetSOAPStarter.ConsumerTestScripts.SOAP.Attributes
+namespace DotNetSOAPStarter.SOAP.Attributes
 {
     public class SOAPControllerAttribute : ProducesAttribute
     {

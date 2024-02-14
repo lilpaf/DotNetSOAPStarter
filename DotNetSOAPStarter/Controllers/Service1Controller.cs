@@ -1,4 +1,5 @@
-using DotNetSOAPStarter.ConsumerTestScripts.SOAP.Attributes;
+using DotNetSOAPStarter.Model.SOAP;
+using DotNetSOAPStarter.SOAP.Attributes;
 using DotNetSOAPStarter.SOAP.Controllers;
 using DotNetSOAPStarter.SOAP.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -23,11 +24,12 @@ namespace DotNetSOAPStarter.Controllers
         public override SOAPResponseEnvelope CreateSOAPResponseEnvelope()
         {
             var envelope =  base.CreateSOAPResponseEnvelope();
-            envelope.ns.Add(SOAPResponseBody.DefaultNamespacePrefix, SOAPResponseBody.DefaultNamespace);
+            envelope.ns.Add(SOAPResponseBodyCustom.DefaultNamespacePrefix, SOAPResponseBodyCustom.DefaultNamespace);
             return envelope;
         }
 
         [HttpPost]
+        [Produces("application/xml")]
         public IActionResult Post(SOAP1_1RequestEnvelope envelope)
         {
             SOAPResponseEnvelope response = CreateSOAPResponseEnvelope();

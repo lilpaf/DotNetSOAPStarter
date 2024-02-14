@@ -1,4 +1,5 @@
-﻿using DotNetSOAPStarter.ConsumerTestScripts.SOAP.Attributes;
+﻿using DotNetSOAPStarter.Model.SOAP;
+using DotNetSOAPStarter.SOAP.Attributes;
 using DotNetSOAPStarter.SOAP.Controllers;
 using DotNetSOAPStarter.SOAP.Model;
 using Microsoft.AspNetCore.Mvc;
@@ -13,9 +14,9 @@ namespace DotNetSOAPStarter.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<Service1Controller> _logger;
+        private readonly ILogger<Service2Controller> _logger;
 
-        public Service2Controller(ILogger<Service1Controller> logger, IWebHostEnvironment env) : base(logger, env)
+        public Service2Controller(ILogger<Service2Controller> logger, IWebHostEnvironment env) : base(logger, env)
         {
             _logger = logger;
         }
@@ -23,7 +24,7 @@ namespace DotNetSOAPStarter.Controllers
         public override SOAPResponseEnvelope CreateSOAPResponseEnvelope()
         {
             var envelope = base.CreateSOAPResponseEnvelope();
-            envelope.ns.Add(SOAPResponseBody.DefaultNamespacePrefix, SOAPResponseBody.DefaultNamespace);
+            envelope.ns.Add(SOAPResponseBodyCustom.DefaultNamespacePrefix, SOAPResponseBodyCustom.DefaultNamespace);
             return envelope;
         }
 

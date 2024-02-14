@@ -1,9 +1,9 @@
 ﻿using System.Xml.Serialization;
 
-namespace DotNetSOAPStarter.SOAP.Model
+namespace DotNetSOAPStarter.Model.SOAP
 {
-    [XmlType(Namespace = SOAPResponseBody.DefaultNamespace)]
-    public partial class SOAPResponseBody
+    [XmlType(Namespace = DefaultNamespace)]
+    public partial class SOAPResponseBodyCustom
     {
         public const string DefaultNamespacePrefix = "ser";
         public const string DefaultNamespace = "http://some.com/services/";

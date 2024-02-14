@@ -8,7 +8,7 @@ namespace DotNetSOAPStarter.SOAP.Model
         [XmlIgnore]
         public SOAP1_1FaultCodes FaultCode { get; set; }
 
-        [XmlElement(ElementName = "faultcode")]
+        [XmlElement("faultcode")]
         public string FaultCodeString 
         { 
             get 
@@ -21,10 +21,10 @@ namespace DotNetSOAPStarter.SOAP.Model
             }
         }
         
-        [XmlElement(ElementName = "faultstring")]
+        [XmlElement("faultstring")]
         public string FaultString { get; set; }
 
-        [XmlElement(ElementName = "detail")]
+        [XmlElement("detail")]
         public SOAPFaultDetail? Detail { get; set; }
 
         //Needed for serialization

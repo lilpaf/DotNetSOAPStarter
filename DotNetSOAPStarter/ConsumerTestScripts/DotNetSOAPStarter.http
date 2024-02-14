@@ -37,3 +37,7 @@ Content-Type: application/xml
 
 GET {{DotNetSOAPStarter_HostAddress}}/Service1?wsdl
 ###
+
+# Will fail due to missing querystring
+GET {{DotNetSOAPStarter_HostAddress}}/Service1
+###

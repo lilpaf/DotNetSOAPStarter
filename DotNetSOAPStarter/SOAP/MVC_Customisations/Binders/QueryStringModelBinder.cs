@@ -12,7 +12,7 @@ namespace DotNetSOAPStarter.SOAP.MVC_Customisations.Binders
     // Null means the parameter was not in the query string
     // Empty string means the parameter was in the query string without any value
     // A string value means the parameter was in the query string and had a value
-    public class QueryStringNullOrEmptyModelBinder : IModelBinder
+    class QueryStringNullOrEmptyModelBinder : IModelBinder
     {
         public Task BindModelAsync(ModelBindingContext bindingContext)
         {
@@ -39,6 +39,7 @@ namespace DotNetSOAPStarter.SOAP.MVC_Customisations.Binders
                 }
                 else
                 {
+                    // Value is something else, fail
                     bindingContext.ModelState.TryAddModelError(
                         bindingContext.ModelName,
                         "Value must be a string or null");
@@ -50,7 +51,7 @@ namespace DotNetSOAPStarter.SOAP.MVC_Customisations.Binders
     }
 }
 
-public class QueryStringNullOrEmptyModelBinderProvider : IModelBinderProvider
+class QueryStringNullOrEmptyModelBinderProvider : IModelBinderProvider
 {
     public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {

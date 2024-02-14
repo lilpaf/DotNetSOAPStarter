@@ -1,12 +1,12 @@
 ﻿using DotNetSOAPStarter.SOAP;
-using Microsoft.AspNetCore.WebUtilities;
 using System.Globalization;
+using System.Xml;
 using System.Xml.Serialization;
 using static DotNetSOAPStarter.SOAP.Model.SOAP1_2Fault;
 
 namespace DotNetSOAPStarter.SOAP.Model
 {
-    [XmlType(Namespace = SOAPConstants.Soap1_2Namespace)]
+    [XmlType(Namespace = SOAPConstants.SOAP1_2Namespace)]
     public partial class SOAP1_2Fault : SOAPFault
     {
         public enum SOAP1_2FaultCodes
@@ -57,20 +57,20 @@ namespace DotNetSOAPStarter.SOAP.Model
             Code = new FaultCode(SOAP1_2FaultCodes.Receiver);
             this.Reason = new Reason("");
         }
-        public SOAP1_2Fault(SOAP1_2FaultCodes faultcode, Reason reason)
+        public SOAP1_2Fault(SOAP1_2FaultCodes faultCode, Reason reason)
         {
-            Code = new FaultCode(faultcode);
+            Code = new FaultCode(faultCode);
             Reason = reason;
         }
-        public SOAP1_2Fault(FaultCode faultcode, Reason reason)
+        public SOAP1_2Fault(FaultCode faultCode, Reason reason)
         {
-            Code = faultcode;
+            Code = faultCode;
             Reason = reason;
         }
-        public SOAP1_2Fault(SOAP1_2FaultSubCodes faultcode)
+        public SOAP1_2Fault(SOAP1_2FaultSubCodes faultCode)
         {
-            Code = new FaultCode(SOAP1_2FaultCodes.Sender, faultcode);
-            Reason = new Reason(SOAP1_2FaultSubCodesMessages[faultcode]);
+            Code = new FaultCode(SOAP1_2FaultCodes.Sender, faultCode);
+            Reason = new Reason(SOAP1_2FaultSubCodesMessages[faultCode]);
         }
 
         public FaultCode Code { get; set; }
@@ -86,7 +86,7 @@ namespace DotNetSOAPStarter.SOAP.Model
             {
                 if (Node is not null)
                 {
-                    return (string?)Node.AbsoluteUri;
+                    return Node.AbsoluteUri;
                 }
 
                 return null;
@@ -95,7 +95,7 @@ namespace DotNetSOAPStarter.SOAP.Model
             {
                 if (value is not null)
                 {
-                    Node = (Uri?)new Uri(value);
+                    Node = new Uri(value);
                     return;
                 }
 
@@ -113,7 +113,7 @@ namespace DotNetSOAPStarter.SOAP.Model
             {
                 if (Role is not null)
                 {
-                    return (string?)Role.AbsoluteUri;
+                    return Role.AbsoluteUri;
                 }
 
                 return null;
@@ -122,7 +122,7 @@ namespace DotNetSOAPStarter.SOAP.Model
             {
                 if (value is not null)
                 {
-                    Role = (Uri?)new Uri(value);
+                    Role = new Uri(value);
                     return;
                 }
 
@@ -145,19 +145,19 @@ public class FaultCode
         Value = "";
     }
 
-    public FaultCode(SOAP1_2FaultCodes faultcode)
+    public FaultCode(SOAP1_2FaultCodes faultCode)
     {
-        this.Value = $"{SOAPConstants.DefaultSOAPEnvelopeNamespacePrefix}:{faultcode}";
+        this.Value = $"{SOAPConstants.DefaultSOAPEnvelopeNamespacePrefix}:{faultCode}";
     }
     
-    public FaultCode(SOAP1_2FaultCodes faultcode, SOAP1_2FaultSubCodes faultsubcode) : this(faultcode)
+    public FaultCode(SOAP1_2FaultCodes faultCode, SOAP1_2FaultSubCodes faultSubcode) : this(faultCode)
     {
-        this.Subcode = new FaultCode(faultsubcode);
+        this.Subcode = new FaultCode(faultSubcode);
     }
     
-    public FaultCode(SOAP1_2FaultSubCodes faultcode)
+    public FaultCode(SOAP1_2FaultSubCodes faultCode)
     {
-        this.Value = $"{SOAPConstants.DefaultSOAPSecurityNamespacePrefix}:{faultcode}";
+        this.Value = $"{SOAPConstants.DefaultSOAPSecurityNamespacePrefix}:{faultCode}";
     }
 }
 
@@ -168,12 +168,12 @@ public class Reason
     
     protected Reason()
     {
-        this.Texts = [new Text("")];
+        this.Texts = new Text[] { new Text("") }; ;
     }
     
     public Reason(string text)
     {
-        this.Texts = [new Text(text)];
+        this.Texts = new Text[] { new Text(text) }; ;
     }
    
     public Reason(Text[] texts)
@@ -188,11 +188,9 @@ public class Text
     public CultureInfo Culture { get; set; }
 
     [XmlText]
-    [XmlElement(ElementName = "value")]
     public string Value { get; set; }
 
-    [XmlElement(ElementName = "lang")]
-    [XmlAttribute(Namespace = "http://www.w3.org/XML/1998/namespace")]
+    [XmlAttribute("lang", Namespace = "http://www.w3.org/XML/1998/namespace")]
     public string Lang
     {
         get 
@@ -210,6 +208,7 @@ public class Text
         Value = "";
         Culture = CultureInfo.CurrentCulture;
     }
+
     public Text(string value, CultureInfo? culture = null)
     {
         this.Culture = culture is null ? CultureInfo.CurrentCulture : culture;

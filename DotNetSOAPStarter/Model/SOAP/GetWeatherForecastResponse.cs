@@ -1,8 +1,8 @@
 ﻿using System.Xml.Serialization;
 
-namespace DotNetSOAPStarter.SOAP.Model
+namespace DotNetSOAPStarter.Model.SOAP
 {
-    [XmlType(Namespace = "")]
+    //[XmlType(Namespace = "")]
     public class GetWeatherForecastResponse
     {
         //[XmlNamespaceDeclarations]

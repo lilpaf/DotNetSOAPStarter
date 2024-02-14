@@ -1,7 +1,9 @@
-﻿using DotNetSOAPStarter.ConsumerTestScripts.SOAP.Attributes;
+﻿using DotNetSOAPStarter.SOAP.Attributes;
 using DotNetSOAPStarter.SOAP.Model;
 using Microsoft.AspNetCore.Mvc;
+using SOAP;
 using System.Text;
+using static DotNetSOAPStarter.SOAP.Model.SOAPFault;
 
 namespace DotNetSOAPStarter.SOAP.Controllers
 {
@@ -40,31 +42,28 @@ namespace DotNetSOAPStarter.SOAP.Controllers
             {
                 controllerName += '/';
             }
-            
+
             if (wsdl == string.Empty)
             {
                 wsdl = "wsdl";
             }
 
-            //ToDo string.NullOrEmpty()
             if (wsdl is not null)
             {
                 return await ProcessWsdlFile($"~/wsdl/{controllerName}{wsdl}.xml");
             }
-            //ToDo string.NullOrEmpty()
+
             if (xsd is not null)
             {
                 if (xsd == string.Empty)
                 {
-                    //ToDo should be SOAP fault
-                    return BadRequest("xsd parameter can not be empty");
+                    return SOAPFault("xsd parameter can not be empty");
                 }
 
                 return await ProcessWsdlFile($"~/wsdl/{controllerName}{xsd}.xml");
             }
 
-            //ToDo should be SOAP fault
-            return BadRequest("invalid request.");
+            return SOAPFault("invalid request.");
         }
 
         protected async Task<IActionResult> ProcessWsdlFile(string path)
@@ -74,7 +73,7 @@ namespace DotNetSOAPStarter.SOAP.Controllers
             if (path.StartsWith("~"))
             {
                 path = path.Replace("~", _env.ContentRootPath);
-            } 
+            }
             string content;
 
             try
@@ -83,13 +82,11 @@ namespace DotNetSOAPStarter.SOAP.Controllers
             }
             catch (DirectoryNotFoundException)
             {
-                //ToDo should be SOAP fault
-                return new ObjectResult("wsdl directory not found") { StatusCode = StatusCodes.Status500InternalServerError };
+                return SOAPFault("wsdl directory not found");
             }
             catch (FileNotFoundException)
             {
-                //ToDo should be SOAP fault
-                return new ObjectResult("wsdl file not found") { StatusCode = StatusCodes.Status500InternalServerError };
+                return SOAPFault("wsdl file not found");
             }
 
             // Replace placeholders with actual values 
@@ -99,5 +96,30 @@ namespace DotNetSOAPStarter.SOAP.Controllers
 
         #endregion
 
+        #region Faults
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [NonAction]
+        public ObjectResult SOAPFault(string faultstring, SOAPFaultDetail? detail = null, PartyAtFault faultcode = PartyAtFault.Server, Uri? node = null, Uri? role = null)
+        {
+            if (SOAPVersion == SOAPVersion.v1_1)
+                // discard node and role 
+                return SOAPEnvelopeResponses.SOAPFault((SOAP1_1ResponseEnvelope)CreateSOAPResponseEnvelope(), faultstring, detail, faultcode);
+            else
+                return SOAPEnvelopeResponses.SOAPFault((SOAP1_2ResponseEnvelope)CreateSOAPResponseEnvelope(), new Reason(faultstring), node, role, detail, faultcode);
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [NonAction]
+        public ObjectResult SOAPFault(Reason reason, SOAPFaultDetail? detail = null, PartyAtFault faultcode = PartyAtFault.Server, Uri? node = null, Uri? role = null)
+        {
+            if (SOAPVersion == SOAPVersion.v1_1)
+                // get the faultstring from the 'reason' and discard node and role 
+                return SOAPEnvelopeResponses.SOAPFault((SOAP1_1ResponseEnvelope)CreateSOAPResponseEnvelope(), reason.Texts[0].Value, detail, faultcode);
+            else
+                return SOAPEnvelopeResponses.SOAPFault((SOAP1_2ResponseEnvelope)CreateSOAPResponseEnvelope(), reason, node, role, detail, faultcode);
+        }
+
+        #endregion
     }
 }

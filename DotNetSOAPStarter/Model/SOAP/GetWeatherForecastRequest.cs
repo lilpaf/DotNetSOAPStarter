@@ -1,4 +1,4 @@
-﻿namespace DotNetSOAPStarter.SOAP.Model
+﻿namespace DotNetSOAPStarter.Model.SOAP
 {
     public class GetWeatherForecastRequest
     {
