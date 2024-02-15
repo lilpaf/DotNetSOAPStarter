@@ -1,6 +1,8 @@
-﻿using DotNetSOAPStarter.Model.SOAP;
+﻿using DotNetSOAPStarter.Model;
+using DotNetSOAPStarter.Model.SOAP;
 using DotNetSOAPStarter.SOAP.Attributes;
 using DotNetSOAPStarter.SOAP.Controllers;
+using DotNetSOAPStarter.SOAP.Filters;
 using DotNetSOAPStarter.SOAP.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,7 +31,20 @@ namespace DotNetSOAPStarter.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(SOAP1_2RequestEnvelope envelope)
+        [PayloadRequired]
+        [Consumes("application/xml")]
+        public IActionResult OperationSelector(SOAP1_2RequestEnvelope envelope)
+        {
+            if (envelope.Body?.GetWeatherForecast is not null)
+            {
+                return GetWeatherForecast(envelope.Body?.GetWeatherForecast);
+            }
+
+            return SOAPOperationNotFound();
+        }
+
+        
+        private IActionResult GetWeatherForecast(GetWeatherForecastRequest request)
         {
             SOAPResponseEnvelope response = CreateSOAPResponseEnvelope();
             response.Body.GetWeatherForecastResponse = new()

@@ -3,7 +3,7 @@
 namespace DotNetSOAPStarter.SOAP.Model
 {
     [XmlType(Namespace ="")]
-    public partial class SOAPFaultDetail
+    public class SOAPFaultDetail
     {
         [XmlNamespaceDeclarations]
         public XmlSerializerNamespaces? ns;

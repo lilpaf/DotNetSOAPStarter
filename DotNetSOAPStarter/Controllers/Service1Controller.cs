@@ -1,6 +1,8 @@
+using DotNetSOAPStarter.Model;
 using DotNetSOAPStarter.Model.SOAP;
 using DotNetSOAPStarter.SOAP.Attributes;
 using DotNetSOAPStarter.SOAP.Controllers;
+using DotNetSOAPStarter.SOAP.Filters;
 using DotNetSOAPStarter.SOAP.Model;
 using Microsoft.AspNetCore.Mvc;
 
@@ -29,9 +31,38 @@ namespace DotNetSOAPStarter.Controllers
         }
 
         [HttpPost]
-        [Produces("application/xml")]
-        public IActionResult Post(SOAP1_1RequestEnvelope envelope)
+        [PayloadRequired]
+        [Consumes("application/xml")]
+        public IActionResult OperationSelector(SOAP1_1RequestEnvelope envelope)
         {
+            if (envelope.Body?.GetWeatherForecast is not null) 
+            {
+                return GetWeatherForecast(envelope.Body?.GetWeatherForecast);
+            }
+
+            return SOAPOperationNotFound();
+        }
+
+        private IActionResult GetWeatherForecast(GetWeatherForecastRequest request)
+        {
+            //Fake error scenario
+            if (request.Value == 10)
+            {
+                var errorList = new List<Error>
+                {
+                    new Error() { Message = "some error message" },
+                    new Error() { Message = "some error message" },
+                    new InputValidationError() { FieldName = "testfield", Message = "some validation error" },
+                    new BusinessRuleError() { RuleName = "rulename", Message = "some business rule error" }
+                };
+
+                return SOAPFault("an error occurred", detail: new SOAPFaultDetailCustom()
+                {
+                    Errors = errorList.ToArray(),
+                    Messages = ["Hello"],
+                });
+            }
+
             SOAPResponseEnvelope response = CreateSOAPResponseEnvelope();
             response.Body.GetWeatherForecastResponse = new()
             {

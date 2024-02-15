@@ -1,4 +1,5 @@
-﻿using DotNetSOAPStarter.SOAP;
+﻿using DotNetSOAPStarter.Model.SOAP;
+using DotNetSOAPStarter.SOAP;
 using System.Globalization;
 using System.Xml;
 using System.Xml.Serialization;
@@ -7,7 +8,7 @@ using static DotNetSOAPStarter.SOAP.Model.SOAP1_2Fault;
 namespace DotNetSOAPStarter.SOAP.Model
 {
     [XmlType(Namespace = SOAPConstants.SOAP1_2Namespace)]
-    public partial class SOAP1_2Fault : SOAPFault
+    public class SOAP1_2Fault : SOAPFault
     {
         public enum SOAP1_2FaultCodes
         {
@@ -130,7 +131,7 @@ namespace DotNetSOAPStarter.SOAP.Model
             }
         }
 
-        public SOAPFaultDetail? Detail { get; set; }
+        public SOAPFaultDetailCustom? Detail { get; set; }
     }
 }
 

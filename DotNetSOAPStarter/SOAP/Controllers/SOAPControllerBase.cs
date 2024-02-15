@@ -1,4 +1,6 @@
-﻿using DotNetSOAPStarter.SOAP.Attributes;
+﻿using DotNetSOAPStarter.Model.SOAP;
+using DotNetSOAPStarter.SOAP.Attributes;
+using DotNetSOAPStarter.SOAP.Filters;
 using DotNetSOAPStarter.SOAP.Model;
 using Microsoft.AspNetCore.Mvc;
 using SOAP;
@@ -30,6 +32,13 @@ namespace DotNetSOAPStarter.SOAP.Controllers
 
         public virtual SOAPResponseEnvelope CreateSOAPResponseEnvelope()
             => SOAPVersion == SOAPVersion.v1_1 ? new SOAP1_1ResponseEnvelope() : new SOAP1_2ResponseEnvelope();
+
+        [HttpPost]
+        [PayloadRequired]
+        public IActionResult CatchUnsupportedContentTypes()
+        {
+            return UnsupportedContentType();
+        }
 
         #region WSDL Handling
 
@@ -100,7 +109,28 @@ namespace DotNetSOAPStarter.SOAP.Controllers
 
         [ApiExplorerSettings(IgnoreApi = true)]
         [NonAction]
-        public ObjectResult SOAPFault(string faultstring, SOAPFaultDetail? detail = null, PartyAtFault faultcode = PartyAtFault.Server, Uri? node = null, Uri? role = null)
+        public ObjectResult UnsupportedContentType()
+        {
+            return SOAPFault("Request is missing or uses an unsupported Content-Type", faultcode: PartyAtFault.Client);
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [NonAction]
+        public ObjectResult SOAPOperationNotFound()
+        {
+            return SOAPFault("The requested SOAP operation is not found", faultcode: PartyAtFault.Client);
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [NonAction]
+        public ObjectResult SOAPPayloadMissing()
+        {
+            return SOAPFault("Request is missing a payload", faultcode: PartyAtFault.Client);
+        }
+
+        [ApiExplorerSettings(IgnoreApi = true)]
+        [NonAction]
+        public ObjectResult SOAPFault(string faultstring, SOAPFaultDetailCustom? detail = null, PartyAtFault faultcode = PartyAtFault.Server, Uri? node = null, Uri? role = null)
         {
             if (SOAPVersion == SOAPVersion.v1_1)
                 // discard node and role 
@@ -111,7 +141,7 @@ namespace DotNetSOAPStarter.SOAP.Controllers
 
         [ApiExplorerSettings(IgnoreApi = true)]
         [NonAction]
-        public ObjectResult SOAPFault(Reason reason, SOAPFaultDetail? detail = null, PartyAtFault faultcode = PartyAtFault.Server, Uri? node = null, Uri? role = null)
+        public ObjectResult SOAPFault(Reason reason, SOAPFaultDetailCustom? detail = null, PartyAtFault faultcode = PartyAtFault.Server, Uri? node = null, Uri? role = null)
         {
             if (SOAPVersion == SOAPVersion.v1_1)
                 // get the faultstring from the 'reason' and discard node and role 

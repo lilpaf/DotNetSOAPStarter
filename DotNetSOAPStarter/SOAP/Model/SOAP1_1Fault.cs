@@ -1,9 +1,10 @@
-﻿using System.Xml.Serialization;
+﻿using DotNetSOAPStarter.Model.SOAP;
+using System.Xml.Serialization;
 
 namespace DotNetSOAPStarter.SOAP.Model
 {
     [XmlType(Namespace = "")]
-    public partial class SOAP1_1Fault : SOAPFault
+    public class SOAP1_1Fault : SOAPFault
     {
         [XmlIgnore]
         public SOAP1_1FaultCodes FaultCode { get; set; }
@@ -25,7 +26,7 @@ namespace DotNetSOAPStarter.SOAP.Model
         public string FaultString { get; set; }
 
         [XmlElement("detail")]
-        public SOAPFaultDetail? Detail { get; set; }
+        public SOAPFaultDetailCustom? Detail { get; set; }
 
         //Needed for serialization
         protected SOAP1_1Fault()

@@ -1,12 +1,17 @@
-﻿using System.Xml.Serialization;
+﻿using DotNetSOAPStarter.SOAP.Model;
+using System.Xml.Serialization;
 
 namespace DotNetSOAPStarter.Model.SOAP
 {
+    //Custom implementation on the SOAPRequestBody
+
     [XmlType(Namespace = DefaultNamespace)]
-    public partial class SOAPRequestBodyCustom
+    public class SOAPRequestBodyCustom : SOAPRequestBody
     {
         public const string DefaultNamespacePrefix = "ser";
         public const string DefaultNamespace = "http://some.com/services/";
-        public GetWeatherForecastRequest? GetWeatherForecast {  get; set; }
+        
+        public GetWeatherForecastRequest? GetWeatherForecast { get; set; }
     }
 }
+

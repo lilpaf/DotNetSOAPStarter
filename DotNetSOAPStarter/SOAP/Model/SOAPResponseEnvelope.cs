@@ -6,7 +6,7 @@ using System.Xml.Serialization;
 namespace DotNetSOAPStarter.SOAP.Model
 {
     [XmlRoot("Envelope", Namespace = SOAPConstants.SOAP1_1Namespace)]
-    public partial class SOAP1_1ResponseEnvelope : SOAPResponseEnvelope 
+    public class SOAP1_1ResponseEnvelope : SOAPResponseEnvelope 
     {
         public SOAP1_1ResponseEnvelope()
         {
@@ -31,7 +31,7 @@ namespace DotNetSOAPStarter.SOAP.Model
     }
         
     [XmlRoot("Envelope", Namespace = SOAPConstants.SOAP1_2Namespace)]
-    public partial class SOAP1_2ResponseEnvelope : SOAPResponseEnvelope 
+    public class SOAP1_2ResponseEnvelope : SOAPResponseEnvelope 
     {
         public SOAP1_2ResponseEnvelope()
         {
@@ -55,7 +55,7 @@ namespace DotNetSOAPStarter.SOAP.Model
         }
     }
 
-    public abstract partial class SOAPResponseEnvelope
+    public abstract class SOAPResponseEnvelope
     {
         [XmlNamespaceDeclarations]
         public XmlSerializerNamespaces ns = new();

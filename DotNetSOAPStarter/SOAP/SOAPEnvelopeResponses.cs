@@ -1,4 +1,5 @@
-﻿using DotNetSOAPStarter.SOAP.Model;
+﻿using DotNetSOAPStarter.Model.SOAP;
+using DotNetSOAPStarter.SOAP.Model;
 using Microsoft.AspNetCore.Mvc;
 using static DotNetSOAPStarter.SOAP.Model.SOAP1_1Fault;
 using static DotNetSOAPStarter.SOAP.Model.SOAP1_2Fault;
@@ -8,7 +9,7 @@ namespace SOAP
 {
     public static class SOAPEnvelopeResponses
     {
-        public static ObjectResult SOAPFault(SOAPVersion version, string faultstring = "", SOAPFaultDetail? detail = null, PartyAtFault? faultcode = PartyAtFault.Server)
+        public static ObjectResult SOAPFault(SOAPVersion version, string faultstring = "", SOAPFaultDetailCustom? detail = null, PartyAtFault? faultcode = PartyAtFault.Server)
         {
             if (version == SOAPVersion.v1_1)
             {
@@ -22,7 +23,7 @@ namespace SOAP
             }
         }
 
-        public static ObjectResult SOAPFault(SOAPVersion version, SOAP1_2FaultSubCodes faultcode, Uri? node = null, Uri? role = null, SOAPFaultDetail? detail = null)
+        public static ObjectResult SOAPFault(SOAPVersion version, SOAP1_2FaultSubCodes faultcode, Uri? node = null, Uri? role = null, SOAPFaultDetailCustom? detail = null)
         {
             if (version == SOAPVersion.v1_1)
             {
@@ -36,14 +37,14 @@ namespace SOAP
             }
         }
 
-        public static ObjectResult SOAPFault(SOAP1_1ResponseEnvelope env, string faultstring = "", SOAPFaultDetail? detail = null, PartyAtFault? faultcode = PartyAtFault.Server)
+        public static ObjectResult SOAPFault(SOAP1_1ResponseEnvelope env, string faultstring = "", SOAPFaultDetailCustom? detail = null, PartyAtFault? faultcode = PartyAtFault.Server)
         {
             var fault = env.BodyTyped.CreateFault(faultcode == PartyAtFault.Client ? SOAP1_1FaultCodes.Client : SOAP1_1FaultCodes.Server, faultstring);
             fault.Detail = detail;
             return SOAPFaultResult(env);
         }
 
-        public static ObjectResult SOAPFault(SOAP1_2ResponseEnvelope env, Reason reason, Uri? node = null, Uri? role = null, SOAPFaultDetail? detail = null, PartyAtFault? faultcode = PartyAtFault.Server)
+        public static ObjectResult SOAPFault(SOAP1_2ResponseEnvelope env, Reason reason, Uri? node = null, Uri? role = null, SOAPFaultDetailCustom? detail = null, PartyAtFault? faultcode = PartyAtFault.Server)
         {
             var fault = env.BodyTyped.CreateFault(faultcode == PartyAtFault.Client ? SOAP1_2FaultCodes.Sender : SOAP1_2FaultCodes.Receiver, reason);
             fault.Node = node;
@@ -52,7 +53,7 @@ namespace SOAP
             return SOAPFaultResult(env);
         }
 
-        public static ObjectResult SOAPFault(SOAP1_2ResponseEnvelope env, Reason reason, SOAP1_2FaultCodes faultcode, Uri? node = null, Uri? role = null, SOAPFaultDetail? detail = null)
+        public static ObjectResult SOAPFault(SOAP1_2ResponseEnvelope env, Reason reason, SOAP1_2FaultCodes faultcode, Uri? node = null, Uri? role = null, SOAPFaultDetailCustom? detail = null)
         {
             var fault = env.BodyTyped.CreateFault(faultcode, reason);
             fault.Node = node;
@@ -61,7 +62,7 @@ namespace SOAP
             return SOAPFaultResult(env);
         }
 
-        public static ObjectResult SOAPFault(SOAP1_2ResponseEnvelope env, Reason reason, FaultCode faultcode, Uri? node = null, Uri? role = null, SOAPFaultDetail? detail = null)
+        public static ObjectResult SOAPFault(SOAP1_2ResponseEnvelope env, Reason reason, FaultCode faultcode, Uri? node = null, Uri? role = null, SOAPFaultDetailCustom? detail = null)
         {
             var fault = env.BodyTyped.CreateFault(faultcode, reason);
             fault.Node = node;
@@ -69,7 +70,7 @@ namespace SOAP
             fault.Detail = detail;
             return SOAPFaultResult(env);
         }
-        public static ObjectResult SOAPFault(SOAP1_2ResponseEnvelope env, SOAP1_2FaultSubCodes faultcode, Uri? node = null, Uri? role = null, SOAPFaultDetail? detail = null)
+        public static ObjectResult SOAPFault(SOAP1_2ResponseEnvelope env, SOAP1_2FaultSubCodes faultcode, Uri? node = null, Uri? role = null, SOAPFaultDetailCustom? detail = null)
         {
             var fault = env.BodyTyped.CreateFault(faultcode);
             fault.Node = node;

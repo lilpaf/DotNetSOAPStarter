@@ -3,7 +3,7 @@
 namespace DotNetSOAPStarter.SOAP.Model
 {
     [XmlType(Namespace = "")]
-    public abstract partial class SOAPFault
+    public abstract class SOAPFault
     {
         public enum PartyAtFault
         {

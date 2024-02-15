@@ -41,3 +41,20 @@ GET {{DotNetSOAPStarter_HostAddress}}/Service1?wsdl
 # Will fail due to missing querystring
 GET {{DotNetSOAPStarter_HostAddress}}/Service1
 ###
+
+# Will fail due to missing querystring
+GET {{DotNetSOAPStarter_HostAddress}}/Service2
+###
+
+# For testing error
+POST {{DotNetSOAPStarter_HostAddress}}/Service1
+Content-Type: application/xml
+
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:ser="http://some.com/services/">
+  <soap:Header/>
+    <soap:Body>
+      <ser:GetWeatherForecast>
+        <ser:value>10</ser:value>
+      </ser:GetWeatherForecast>
+    </soap:Body>
+</soap:Envelope>

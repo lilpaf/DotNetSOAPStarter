@@ -1,6 +1,6 @@
 ﻿namespace DotNetSOAPStarter.SOAP.Model
 {
-    public partial class SOAPRequestBody
+    public class SOAPRequestBody
     {
     }
 }
