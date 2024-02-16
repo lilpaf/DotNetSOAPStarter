@@ -1,4 +1,6 @@
 using DotNetSOAPStarter.SOAP.MVC_Customisations.Binders;
+using DotNetSOAPStarter.SOAP.MVC_Customisations.DependencyInjection;
+using Microsoft.AspNetCore.Mvc;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,28 +18,20 @@ try
         configuration.ReadFrom.Configuration(builder.Configuration);
     });
    
-
-    // Add services to the container.
-
     builder.Services.AddControllers(options =>
     {
         options.ModelBinderProviders.Insert(0, new SOAPRequestEnvelopeModelBinderProvider());
         options.ModelBinderProviders.Insert(0, new QueryStringNullOrEmptyModelBinderProvider());
         
     })
-    .AddXmlSerializerFormatters(); 
-    
-    //builder.Services.AddEndpointsApiExplorer();
-    //builder.Services.AddSwaggerGen();
+    .AddXmlSerializerFormatters();
+
+    builder.Services.Configure<ApiBehaviorOptions>(options =>
+    {
+        options.InvalidModelStateResponseFactory = ApiBehaviorOptionsExtensions.InvalidModelStateResponseFactory;
+    });
 
     var app = builder.Build();
-
-    // Configure the HTTP request pipeline.
-    if (app.Environment.IsDevelopment())
-    {
-        //app.UseSwagger();
-        //app.UseSwaggerUI();
-    }
 
     //app.UseHttpsRedirection();
 
