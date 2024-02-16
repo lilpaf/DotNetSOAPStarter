@@ -51,7 +51,7 @@ namespace DotNetSOAPStarter.SOAP.MVC_Customisations.Binders
     }
 }
 
-class QueryStringNullOrEmptyModelBinderProvider : IModelBinderProvider
+public class QueryStringNullOrEmptyModelBinderProvider : IModelBinderProvider
 {
     public IModelBinder? GetBinder(ModelBinderProviderContext context)
     {

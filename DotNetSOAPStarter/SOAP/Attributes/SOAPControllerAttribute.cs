@@ -8,9 +8,9 @@ namespace DotNetSOAPStarter.SOAP.Attributes
     {
         public SOAPControllerAttribute(SOAPVersion soapVersions) : base(MediaTypeNames.Application.Xml)
         {
-            SOAPVersions = soapVersions;
+            SOAPVersion = soapVersions;
         }
 
-        public SOAPVersion SOAPVersions { get; }
+        public SOAPVersion SOAPVersion { get; }
     }
 }

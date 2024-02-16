@@ -33,11 +33,11 @@ namespace DotNetSOAPStarter.Controllers
         [HttpPost]
         [PayloadRequired]
         [Consumes("application/xml")]
-        public IActionResult OperationSelector(SOAP1_1RequestEnvelope envelope)
+        public IActionResult OperationSelector(SOAPRequestEnvelope envelope)
         {
             if (envelope.Body?.GetWeatherForecast is not null) 
             {
-                return GetWeatherForecast(envelope.Body?.GetWeatherForecast);
+                return GetWeatherForecast(envelope.Body.GetWeatherForecast);
             }
 
             return SOAPOperationNotFound();

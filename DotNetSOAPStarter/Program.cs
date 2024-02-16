@@ -1,3 +1,4 @@
+using DotNetSOAPStarter.SOAP.MVC_Customisations.Binders;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -20,7 +21,9 @@ try
 
     builder.Services.AddControllers(options =>
     {
+        options.ModelBinderProviders.Insert(0, new SOAPRequestEnvelopeModelBinderProvider());
         options.ModelBinderProviders.Insert(0, new QueryStringNullOrEmptyModelBinderProvider());
+        
     })
     .AddXmlSerializerFormatters(); 
     

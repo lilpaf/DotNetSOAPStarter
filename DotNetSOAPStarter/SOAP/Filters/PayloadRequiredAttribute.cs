@@ -16,9 +16,10 @@ namespace DotNetSOAPStarter.SOAP.Filters
             SOAPControllerBase controller = (SOAPControllerBase)context.Controller;
 
             var parametersMetaData = context.ActionDescriptor.Parameters
-                .Where(x => typeof(SOAP1_1RequestEnvelope)
-                .IsAssignableTo(x.ParameterType) || typeof(SOAP1_2RequestEnvelope)
-                .IsAssignableTo(x.ParameterType));
+                .Where(x =>
+                typeof(SOAPRequestEnvelope).IsAssignableTo(x.ParameterType) ||
+                typeof(SOAP1_1RequestEnvelope).IsAssignableTo(x.ParameterType) || 
+                typeof(SOAP1_2RequestEnvelope).IsAssignableTo(x.ParameterType));
             
             if (parametersMetaData.Count() < 1)
             {
@@ -32,7 +33,7 @@ namespace DotNetSOAPStarter.SOAP.Filters
 
             if (parametersMetaData.Count() > 1)
             {
-                throw new Exception($"PayloadRequiredAttribute cannot determine the target model type. Too many parameters of type {nameof(SOAP1_1RequestEnvelope)} or {nameof(SOAP1_2RequestEnvelope)}");
+                throw new Exception($"PayloadRequiredAttribute cannot determine the target model type. Too many parameters of type {nameof(SOAPRequestEnvelope)}, {nameof(SOAP1_1RequestEnvelope)} or {nameof(SOAP1_2RequestEnvelope)}");
             }
 
             var parameterMetaData = parametersMetaData.First();

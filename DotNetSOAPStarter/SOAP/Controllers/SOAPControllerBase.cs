@@ -27,7 +27,7 @@ namespace DotNetSOAPStarter.SOAP.Controllers
             if (soapVersionAttribute is null)
                 throw new Exception("class deriving from SOAPControllerBase is missing the SOAPController attribute");
 
-            SOAPVersion = soapVersionAttribute.SOAPVersions;
+            SOAPVersion = soapVersionAttribute.SOAPVersion;
         }
 
         public virtual SOAPResponseEnvelope CreateSOAPResponseEnvelope()
