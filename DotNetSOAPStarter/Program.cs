@@ -1,3 +1,4 @@
+using DotNetSOAPStarter.SOAP.Authentication.Handlers;
 using DotNetSOAPStarter.SOAP.MVC_Customisations.Binders;
 using DotNetSOAPStarter.SOAP.MVC_Customisations.DependencyInjection;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,8 @@ try
     {
         options.InvalidModelStateResponseFactory = ApiBehaviorOptionsExtensions.InvalidModelStateResponseFactory;
     });
+
+    builder.Services.AddAuthentication().AddSOAP_FileDataStore();
 
     var app = builder.Build();
 

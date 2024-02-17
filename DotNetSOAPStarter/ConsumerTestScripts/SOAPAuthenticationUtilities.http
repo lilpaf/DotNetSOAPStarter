@@ -1,0 +1,10 @@
+@DotNetSOAPStarter_HostAddress = http://localhost:5219
+
+# Will format the response as JSON
+GET {{DotNetSOAPStarter_HostAddress}}/SOAPAuthenticationUtilities/GetEncodedPassword
+###
+GET {{DotNetSOAPStarter_HostAddress}}/SOAPAuthenticationUtilities/GetEncodedPassword?password=anx6pud5BdHNpO4h
+###
+GET {{DotNetSOAPStarter_HostAddress}}/SOAPAuthenticationUtilities/TestAuthentication
+###
+GET {{DotNetSOAPStarter_HostAddress}}/SOAPAuthenticationUtilities/TestAuthentication?userid=dd27d494-55f4-4912-a38e-626ddb019ac7&password=anx6pud5BdHNpO4h

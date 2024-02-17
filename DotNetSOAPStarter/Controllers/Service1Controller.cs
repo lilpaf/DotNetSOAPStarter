@@ -4,6 +4,7 @@ using DotNetSOAPStarter.SOAP.Attributes;
 using DotNetSOAPStarter.SOAP.Controllers;
 using DotNetSOAPStarter.SOAP.Filters;
 using DotNetSOAPStarter.SOAP.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DotNetSOAPStarter.Controllers
@@ -30,11 +31,14 @@ namespace DotNetSOAPStarter.Controllers
             return envelope;
         }
 
+        [Authorize]
         [HttpPost]
         [PayloadRequired]
         [Consumes("application/xml")]
         public IActionResult OperationSelector(SOAPRequestEnvelope envelope)
         {
+            var user = HttpContext.User;
+
             if (envelope.Body?.GetWeatherForecast is not null) 
             {
                 return GetWeatherForecast(envelope.Body.GetWeatherForecast);

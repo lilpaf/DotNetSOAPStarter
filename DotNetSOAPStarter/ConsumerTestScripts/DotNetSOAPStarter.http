@@ -58,3 +58,31 @@ Content-Type: application/xml
       </ser:GetWeatherForecast>
     </soap:Body>
 </soap:Envelope>
+
+###
+# with WS-UsernameToken AuthN
+POST {{DotNetSOAPStarter_HostAddress}}/Service1
+Content-Type: application/xml
+
+<soap:Envelope 
+xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" 
+xmlns:wsse="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd" 
+xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+xmlns:ser="http://some.com/services/" >
+   <soap:Header>
+      <wsse:Security>
+         <wsse:UsernameToken>
+            <wsse:Username>dd27d494-55f4-4912-a38e-626ddb019ac7</wsse:Username>
+            <wsse:Password Type="#PasswordText">anx6pud5BdHNpO4h</wsse:Password>
+            <wsse:Nonce>12345</wsse:Nonce>
+            <wsu:Created>2023-10-03T10:00:00.0000000+00:00</wsu:Created>
+         </wsse:UsernameToken>
+      </wsse:Security>
+   </soap:Header>
+   <soap:Body>
+      <ser:GetWeatherForecast>
+         <ser:value>1</ser:value>
+      </ser:GetWeatherForecast>
+   </soap:Body>
+</soap:Envelope>
+###
