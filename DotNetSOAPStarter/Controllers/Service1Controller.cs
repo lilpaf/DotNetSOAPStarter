@@ -4,8 +4,8 @@ using DotNetSOAPStarter.SOAP.Attributes;
 using DotNetSOAPStarter.SOAP.Controllers;
 using DotNetSOAPStarter.SOAP.Filters;
 using DotNetSOAPStarter.SOAP.Model;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using AuthorizeAttribute = DotNetSOAPStarter.SOAP.Filters.AuthorizeAttribute;
 
 namespace DotNetSOAPStarter.Controllers
 {

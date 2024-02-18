@@ -61,7 +61,7 @@ namespace DotNetSOAPStarter.SOAP.Authentication.Handlers
             if (soapAttribute is not null)
             {
                 await Context.WriteResultAsync(SOAPEnvelopeResponses.SOAPFault(soapAttribute.SOAPVersion, authErrorCode is not null ? authErrorCode.Value : SOAP1_2FaultSubCodes.FailedAuthentication));
-            
+
                 return;
             }
 
@@ -220,10 +220,16 @@ namespace DotNetSOAPStarter.SOAP.Authentication.Handlers
         private static readonly ActionDescriptor EmptyActionDescriptor = new ActionDescriptor();
         public static Task WriteResultAsync(this HttpContext context, ObjectResult result)
         {
-            var executor = context.RequestServices.GetRequiredService<IActionResultExecutor<ObjectResult>>();
-            var routeData = context.GetRouteData() ?? EmptyRouteData;
-            var actionContext = new ActionContext(context, routeData, EmptyActionDescriptor);
-            return executor.ExecuteAsync(actionContext, result);
+            if (!context.Response.HasStarted)
+            {
+                var executor = context.RequestServices.GetRequiredService<IActionResultExecutor<ObjectResult>>();
+                var routeData = context.GetRouteData() ?? EmptyRouteData;
+                var actionContext = new ActionContext(context, routeData, EmptyActionDescriptor);
+
+                return executor.ExecuteAsync(actionContext, result);
+            }
+
+            return Task.CompletedTask;
         }
     }
 }

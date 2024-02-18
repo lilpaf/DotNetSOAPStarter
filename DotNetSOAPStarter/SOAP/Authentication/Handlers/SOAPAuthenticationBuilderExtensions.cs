@@ -1,4 +1,5 @@
 ﻿using DotNetSOAPStarter.SOAP.Authentication.DataStores.File;
+using DotNetSOAPStarter.SOAP.Authorization;
 using Microsoft.AspNetCore.Authentication;
 
 namespace DotNetSOAPStarter.SOAP.Authentication.Handlers
@@ -54,7 +55,8 @@ namespace DotNetSOAPStarter.SOAP.Authentication.Handlers
             
             // Add a DataStore (File)
             builder.Services.AddSingleton<IAuthenticationRepository, FileAuthDataStore>();
-            
+            builder.Services.AddSingleton<IAuthorizationRepository, FileAuthDataStore>();
+
             return builder;
         }
     }
