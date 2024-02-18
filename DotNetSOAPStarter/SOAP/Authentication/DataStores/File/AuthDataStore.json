@@ -3,6 +3,16 @@
     "UserID": "dd27d494-55f4-4912-a38e-626ddb019ac7",
     "Username": "Zoe",
     "Description": "Test Auth User",
-    "Password": "10000.7iybkv38yVJZeK3bxDhyzw.Kv1IvG23CQmRKGLaSy9dtOjEHH3fpq7W-FcXrbrEKRg"
+    "Password": "10000.7iybkv38yVJZeK3bxDhyzw.Kv1IvG23CQmRKGLaSy9dtOjEHH3fpq7W-FcXrbrEKRg",
+    "Roles": [ "User", "Manager" ],
+    "Departments": [ "IT", "ITSupport" ],
+    "Deny": [
+      {
+        "Service1": {
+          "Description": "Allow access only to the listed operations for Service 1",
+          "Allow": [ "GetWeatherForecast" ]
+        }
+      }
+    ]
   }
 ]

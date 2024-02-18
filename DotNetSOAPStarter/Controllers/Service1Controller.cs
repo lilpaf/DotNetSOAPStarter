@@ -31,7 +31,7 @@ namespace DotNetSOAPStarter.Controllers
             return envelope;
         }
 
-        [Authorize]
+        [Authorize(Roles = "User")]
         [HttpPost]
         [PayloadRequired]
         [Consumes("application/xml")]

@@ -42,7 +42,21 @@ namespace DotNetSOAPStarter.SOAP.Authentication.DataStores.File
                     string userId = userElement.GetMandatoryString("UserID");
                     string username = userElement.GetMandatoryString("Username");
                     string password = userElement.GetMandatoryString("Password");
-                    AuthEntry user = new AuthEntry(userId, username, password);
+
+                    List<String>? roles = null;
+                    JsonElement rolesColl;
+                    if (userElement.TryGetProperty("Roles", out rolesColl))
+                    {
+                        roles = new List<string>();
+                        foreach (JsonElement roleElement in rolesColl.EnumerateArray())
+                        {
+                            string? role = roleElement.GetString();
+                            if (role is not null)
+                                roles.Add(role);
+                        }
+                    }
+
+                    AuthEntry user = new AuthEntry(userId, username, password, roles);
                     users.Add(new KeyValuePair<string, AuthEntry>(user.UserId, user));
                 }
             }
@@ -74,6 +88,14 @@ namespace DotNetSOAPStarter.SOAP.Authentication.DataStores.File
                     {
                         var identity = (ClaimsIdentity)principal.Identity;
                         identity.AddClaim(new Claim(identity.NameClaimType, userAuth.Username));
+
+                        if (userAuth.Roles is not null)
+                        {
+                            foreach (string role in userAuth.Roles)
+                            {
+                                identity.AddClaim(new Claim(identity.RoleClaimType, role));
+                            }
+                        }
                     }
 
                     return Task.FromResult(isAuthenticated);

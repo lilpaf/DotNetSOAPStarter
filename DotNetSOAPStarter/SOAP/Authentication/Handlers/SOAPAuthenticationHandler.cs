@@ -31,27 +31,41 @@ namespace DotNetSOAPStarter.SOAP.Authentication.Handlers
         {
             SOAPControllerAttribute? soapAttribute = Context.GetEndpoint()?
                 .Metadata.GetMetadata<SOAPControllerAttribute>();
-            
+
             if (soapAttribute is not null)
             {
                 if (authErrorMessage is not null)
                 {
                     await Context.WriteResultAsync(SOAPEnvelopeResponses.SOAPFault(
-                        soapAttribute.SOAPVersion, 
-                        authErrorMessage, 
+                        soapAttribute.SOAPVersion,
+                        authErrorMessage,
                         faultcode: PartyAtFault.Client));
                 }
                 else
                 {
                     await Context.WriteResultAsync(SOAPEnvelopeResponses.SOAPFault(
-                        soapAttribute.SOAPVersion, 
+                        soapAttribute.SOAPVersion,
                         authErrorCode is not null ? authErrorCode.Value : SOAP1_2FaultSubCodes.InvalidSecurity));
                 }
 
                 return;
             }
-            
+
             await base.HandleChallengeAsync(properties);
+        }
+
+        protected async override Task HandleForbiddenAsync(AuthenticationProperties properties)
+        {
+            SOAPControllerAttribute? soapAttribute = Context.GetEndpoint()?.Metadata.GetMetadata<SOAPControllerAttribute>();
+
+            if (soapAttribute is not null)
+            {
+                await Context.WriteResultAsync(SOAPEnvelopeResponses.SOAPFault(soapAttribute.SOAPVersion, authErrorCode is not null ? authErrorCode.Value : SOAP1_2FaultSubCodes.FailedAuthentication));
+            
+                return;
+            }
+
+            await base.HandleForbiddenAsync(properties);
         }
 
         protected async override Task<AuthenticateResult> HandleAuthenticateAsync()
@@ -64,12 +78,12 @@ namespace DotNetSOAPStarter.SOAP.Authentication.Handlers
             {
                 return AuthenticateResult.NoResult();
             }
-               
+
             HttpRequest request = Context.Request;
             var readResult = await ReadAuthenticationDataAsync(request, soapAttribute);
             SOAPAuthData? authData = readResult.authData;
             string? errorMsg = readResult.errMsg;
-            
+
             if (errorMsg is not null)
             {
                 authErrorMessage = errorMsg;
@@ -106,16 +120,16 @@ namespace DotNetSOAPStarter.SOAP.Authentication.Handlers
             ClaimsIdentity identity = new ClaimsIdentity(SOAPAuthenticationDefaults.AuthenticationScheme + "Identity");
             principal.AddIdentity(identity);
             identity.AddClaim(new Claim(ClaimTypes.NameIdentifier, authData.Header.Security.UsernameToken.Username));
-            
+
             // Authenticate the user
             if (await _authNRepository.AuthenticateUserAsync(
-                principal, 
+                principal,
                 authData.Header.Security.UsernameToken.Password?.Value))
             {
                 // Add the header into the request context so Auth Handlers can use it.
                 Context.Items.Add(SOAPAuthData.RequestKey_SOAPAuthData, authData);
                 AuthenticationTicket ticket = new AuthenticationTicket(
-                    principal, 
+                    principal,
                     SOAPAuthenticationDefaults.AuthenticationScheme);
                 return AuthenticateResult.Success(ticket);
             }
@@ -125,12 +139,12 @@ namespace DotNetSOAPStarter.SOAP.Authentication.Handlers
         }
 
         protected virtual async Task<(SOAPAuthData? authData, string? errMsg)> ReadAuthenticationDataAsync(
-            HttpRequest request, 
+            HttpRequest request,
             SOAPControllerAttribute soapAttribute)
         {
             request.EnableBuffering();
             request.Body.Position = 0;
-            
+
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.Async = true;
             settings.IgnoreWhitespace = true;
@@ -139,7 +153,7 @@ namespace DotNetSOAPStarter.SOAP.Authentication.Handlers
             string soapNamespace = soapAttribute.SOAPVersion == SOAPVersion.v1_1 ? SOAPConstants.SOAP1_1Namespace : SOAPConstants.SOAP1_2Namespace;
             SOAPAuthData? authData = new SOAPAuthData();
             string? errorMsg = null;
-            
+
             try
             {
                 while (await reader.ReadAsync())
